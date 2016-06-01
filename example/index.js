@@ -1,8 +1,6 @@
-import {Model} from '../src/model';
-import {View} from '../src/view';
-
 (function () {
-  var container = document.getElementById('app');
+  const {Model, View} = bm2v;
+  const container = document.getElementById('app');
   const todos = [
     {title: 'hello world', content: 'hello world...',},
     {title: 'hello world again', content: 'hello world again...',},

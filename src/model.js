@@ -1,7 +1,8 @@
-class Puppet {
+export class Puppet {
   constructor(type, node) {
     this.cache = [];
-    this.add(type, node);
+    if (type && node)
+      this.add(type, node);
   }
   add(type, node) {
     this.cache.push([type, node]);
