@@ -1,7 +1,7 @@
 {
-  "name": "todo-x",
-  "version": "1.0.0",
-  "description": "",
+  "name": "bm2v",
+  "version": "0.1.0",
+  "description": "bind models to views",
   "main": "index.js",
   "scripts": {
     "dev": "lite-server",
