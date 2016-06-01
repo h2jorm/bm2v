@@ -11,27 +11,27 @@ class Puppet {
 class Model {
   constructor(value) {
     this.model = value;
-    this.binds = {};
+    this.puppets = {};
   }
-  bind(key, type, textNode) {
-    const old = this.binds[key];
-    if (!old) {
-      this.binds[key] = new Puppet(type, textNode);
-    }
+  bindPuppet(key, type, textNode) {
+    const old = this.puppets[key];
+    if (!old)
+      this.puppets[key] = new Puppet(type, textNode);
     else
-      this.binds[key] = old.add(type, textNode);
+      old.add(type, textNode);
   }
   update(key, value) {
     this.model[key] = value;
-    const puppet = this.binds[key];
+    const puppet = this.puppets[key];
     if (!puppet)
       return;
     puppet.cache.forEach(puppet => {
       const [type, node] = puppet;
       if (type === 'text')
         node.textContent = value;
-      if (type === 'form')
+      if (type === 'form') {
         node.value = value;
+      }
     });
   }
 }
@@ -42,7 +42,7 @@ class View {
     this.dom = createFragment(template);
     if (models)
       models.forEach(model => {
-        this.bind(model.model, model.bind);
+        this.bindModel(model.model, model.bind);
       });
     if (events)
       for (let selector in events) {
@@ -51,18 +51,25 @@ class View {
         this.bindEvent(selector, eventName, callback);
       }
   }
-  bind(model, conf) {
+  bindModel(model, conf) {
     let key;
     for (key in conf) {
-      const [type, selector] = conf[key];
-      const container = this.dom.querySelector(selector);
-      if (!container)
-        throw new Error(`can not find ${selector}`);
-      removeChildNodes(container);
-      const textNode = document.createTextNode(model.model[key]);
-      container.appendChild(textNode);
-      model.bind(key, type, textNode);
-      model.update(key, model.model[key]);
+      const binds = conf[key];
+      binds.forEach(bind => {
+        const [type, selector] = bind;
+        if (type === 'text') {
+          const container = this.dom.querySelector(selector);
+          if (!container)
+            throw new Error(`can not find ${selector}`);
+          removeChildNodes(container);
+          const textNode = document.createTextNode(model.model[key]);
+          container.appendChild(textNode);
+          model.bindPuppet(key, type, textNode);
+        }
+        if (type === 'form')
+          model.bindPuppet(key, type, this.dom.querySelector(selector));
+        model.update(key, model.model[key]);
+      });
     }
   }
   bindEvent(selector, eventName, callback) {
@@ -92,15 +99,17 @@ class View {
         {
           model: todoModel,
           bind: {
-            title: ['text', '[data-model="title"]'],
-            content: ['text', '[data-model="content"]'],
-            // title: ['form', 'input'],
+            title: [
+              ['text', '[data-model="title"]'],
+              ['form', 'input'],
+            ],
+            content: [['text', '[data-model="content"]']],
           },
         },
         {
           model: personModel,
           bind: {
-            name: ['text', '[data-model="personName"]'],
+            name: [['text', '[data-model="personName"]']],
           },
         },
       ],
