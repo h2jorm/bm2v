@@ -1,8 +1,6 @@
 import {Puppet, Model} from './model';
 import {View} from './view';
 
-Object.assign(exports, {
-  Puppet,
-  Model,
-  View,
-});
+exports.Puppet = Puppet;
+exports.Model = Model;
+exports.View = View;
