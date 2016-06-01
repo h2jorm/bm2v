@@ -13,6 +13,54 @@ describe('View', function () {
     });
     expect(view2.dom.innerHTML).toBe(template2);
   });
+  describe('append', function () {
+    var view;
+    var template = '<ul></ul>';
+    beforeEach(function () {
+      view = new View({
+        template: template,
+      });
+    });
+    it('2 parameters - view', function () {
+      var innerView = new View({
+        template: '<li>hello world</li>'
+      });
+      view.append('ul', innerView);
+      expect(view.dom.innerHTML).toBe('<ul><div><li>hello world</li></div></ul>');
+    });
+    it('2 parameters - dom', function () {
+      var dom = document.createElement('li');
+      dom.textContent = 'hello';
+      view.append('ul', dom);
+      expect(view.dom.innerHTML).toBe('<ul><li>hello</li></ul>');
+    });
+    it('1 parameter', function () {
+      var dom = document.createElement('li');
+      dom.textContent = 'hello';
+      view.append(dom);
+      expect(view.dom.innerHTML).toBe('<ul></ul><li>hello</li>');
+    });
+    it('invalid', function () {
+      function invalid1() {
+        view.append();
+      }
+      function invalid2() {
+        view.append('ul');
+      }
+      function invalid3() {
+        var dom = document.createElement('li');
+        dom.textContent = 'hello';
+        view.append('div', dom);
+      }
+      function invalid4() {
+        view.append('ul', 12);
+      }
+      expect(invalid1).toThrow();
+      expect(invalid2).toThrow();
+      expect(invalid3).toThrow();
+      expect(invalid4).toThrow();
+    });
+  });
   describe('models', function () {
     var Model = bm2v.Model;
     it('1 model - 1 key - node', function () {

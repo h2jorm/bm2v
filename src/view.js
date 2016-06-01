@@ -13,6 +13,30 @@ export class View {
         this.bindEvent(selector, eventName, callback);
       }
   }
+  append(selector, view) {
+    let parentNode, childNode;
+    const errMsg = 'invalid parameters in bm2v.View.append method';
+    switch (arguments.length) {
+      case 2:
+      parentNode = this.dom.querySelector(selector);
+      childNode = view instanceof View ? view.dom : view;
+      break;
+      case 1:
+      parentNode = this.dom;
+      if (selector instanceof View)
+        childNode = selector.dom;
+      else if (selector instanceof HTMLElement)
+        childNode = selector;
+      else
+        throw new Error(errMsg);
+      break;
+      default:
+      throw new Error(errMsg);
+    }
+    if (!parentNode)
+      throw new Error(`can not find '${selector}' when try to append to it`);
+    parentNode.appendChild(childNode);
+  }
   bindEvent(selector, eventName, callback) {
     const dom = this.dom.querySelector(selector);
     if (!dom)

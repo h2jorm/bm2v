@@ -44,7 +44,7 @@ var View = bm2v.View;
   });
   todos.forEach(function (_todo) {
     var todo = createTodo(_todo);
-    todoAppView.dom.appendChild(todo.dom);
+    todoAppView.append('ul', todo);
   });
 
   var addTodoView = new View({
@@ -57,7 +57,7 @@ var View = bm2v.View;
         var newTodo = {
           title: newTodoTitle, done: false
         };
-        todoAppView.dom.appendChild(createTodo(newTodo).dom);
+        todoAppView.append('ul', createTodo(newTodo));
         input.value = '';
       }],
     },
