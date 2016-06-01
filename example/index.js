@@ -1,51 +1,88 @@
+var Model = bm2v.Model;
+var View = bm2v.View;
+
+// example: hello
 (function () {
-  const {Model, View} = bm2v;
-  const container = document.getElementById('app');
-  const todos = [
-    {title: 'hello world', content: 'hello world...',},
-    {title: 'hello world again', content: 'hello world again...',},
-    {title: 'hello', content: 'hello...',},
+  var helloExample = document.getElementById('hello');
+  var helloModel = new Model({
+    name: '',
+  });
+  var tmpl = 'name: <input><div>hello, <span data-model="name"></span></div>';
+  var view = new View({
+    template: tmpl,
+    models: [
+      {
+        model: helloModel,
+        bind: {
+          name: [
+            ['text', '[data-model="name"]'],
+            ['form', 'input'],
+          ],
+        },
+      },
+    ],
+    events: {
+      'input': ['keyup', function (event) {
+        var newName = event.currentTarget.value;
+        helloModel.update('name', newName);
+      }],
+    }
+  });
+  helloExample.appendChild(view.dom);
+})();
+
+// example: todo
+(function () {
+  var todoExample = document.getElementById('todo');
+  var todos = [
+    {title: 'hello world', done: false,},
+    {title: 'hello world again', done: false,},
+    {title: 'hello', done: true,},
   ];
-  const person = {
-    name: 'leeching'
-  };
+  var todoAppView = new View({
+    template: '<ul></ul>'
+  });
+  todos.forEach(function (_todo) {
+    var todo = createTodo(_todo);
+    todoAppView.dom.appendChild(todo.dom);
+  });
 
-  const personModel = new Model(person);
+  var addTodoView = new View({
+    template: '<div><input><button>add</button></div>',
+    events: {
+      'button': ['click', function (event) {
+        event.preventDefault();
+        var input = this.dom.querySelector('input');
+        var newTodoTitle = input.value;
+        var newTodo = {
+          title: newTodoTitle, done: false
+        };
+        todoAppView.dom.appendChild(createTodo(newTodo).dom);
+        input.value = '';
+      }],
+    },
+  });
 
-  todos.forEach(todo => {
-    const todoModel = new Model(todo);
-    const todoView = new View({
-      template: require('./todo.html'),
+  todoExample.appendChild(todoAppView.dom);
+  todoExample.appendChild(addTodoView.dom);
+
+  function createTodo(todo) {
+    var todoModel = new Model(todo);
+    var tmpl = '<li><span data-model="title"></span>-<span data-model="done"></span></li>';
+    var todoView = new View({
+      template: tmpl,
       models: [
         {
           model: todoModel,
           bind: {
             title: [
               ['text', '[data-model="title"]'],
-              ['form', 'input'],
             ],
-            content: [['text', '[data-model="content"]']],
-          },
-        },
-        {
-          model: personModel,
-          bind: {
-            name: [['text', '[data-model="personName"]']],
+            done: [['text', '[data-model="done"]']],
           },
         },
       ],
-      events: {
-        'input': ['keyup', changeTodoTitle(todoModel)],
-      },
     });
-    container.appendChild(todoView.dom);
-  });
-  function changeTodoTitle(todoModel) {
-    return function (event) {
-      const newTitle = event.currentTarget.value;
-      if (!newTitle)
-        return;
-      todoModel.update('title', newTitle);
-    };
+    return todoView;
   }
 })();

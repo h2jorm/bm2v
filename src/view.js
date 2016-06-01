@@ -1,7 +1,7 @@
 export class View {
   constructor(conf) {
     const {template, models, events} = conf;
-    this.dom = createFragment(template);
+    this.dom = createContainer(template);
     if (models)
       models.forEach(model => {
         this.bindModel(model.model, model.bind);
@@ -12,6 +12,14 @@ export class View {
         const [eventName, callback] = event;
         this.bindEvent(selector, eventName, callback);
       }
+  }
+  bindEvent(selector, eventName, callback) {
+    const dom = this.dom.querySelector(selector);
+    if (!dom)
+      return;
+    dom.addEventListener(eventName, event => {
+      callback.call(this, event);
+    });
   }
   bindModel(model, conf) {
     let key;
@@ -34,10 +42,6 @@ export class View {
       });
     }
   }
-  bindEvent(selector, eventName, callback) {
-    const dom = this.dom.querySelector(selector);
-    dom.addEventListener(eventName, callback);
-  }
 }
 
 function removeChildNodes(dom) {
@@ -55,4 +59,12 @@ function createFragment(html) {
     fragment.appendChild(container.firstChild);
   }
   return fragment;
+}
+
+function createContainer(html) {
+  var container = document.createElement('div');
+  container.innerHTML = html;
+  // if (container.childNodes.length === 1 && container.childNodes[0].nodeType === 1)
+  //   return container.childNodes[0];
+  return container;
 }

@@ -31,7 +31,7 @@ export class Model {
       if (type === 'text')
         node.textContent = value;
       if (type === 'form') {
-        node.value = value;
+        node.value !== value ? node.value = value : '';
       }
     });
   }

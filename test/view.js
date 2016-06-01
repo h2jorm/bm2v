@@ -1,13 +1,17 @@
 describe('View', function () {
   var View = bm2v.View;
   it('template', function () {
-    var template = '<div>hello world</div>';
-    var view = new View({
-      template: template,
+    var template1 = '<div>hello world</div>';
+    var view1 = new View({
+      template: template1,
     });
-    var viewDom = document.createElement('div');
-    viewDom.appendChild(view.dom);
-    expect(viewDom.innerHTML).toBe(template);
+    expect(view1.dom.innerHTML).toBe(template1);
+
+    var template2 = 'hello';
+    var view2 = new View({
+      template: template2,
+    });
+    expect(view2.dom.innerHTML).toBe(template2);
   });
   describe('models', function () {
     var Model = bm2v.Model;
