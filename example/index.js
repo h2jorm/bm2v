@@ -44,7 +44,7 @@ var View = bm2v.View;
   });
   todos.forEach(function (_todo) {
     var todo = createTodo(_todo);
-    todoAppView.append('ul', todo);
+    todoAppView.append(todo);
   });
 
   var addTodoView = new View({
@@ -57,7 +57,7 @@ var View = bm2v.View;
         var newTodo = {
           title: newTodoTitle, done: false
         };
-        todoAppView.append('ul', createTodo(newTodo));
+        todoAppView.append(createTodo(newTodo));
         input.value = '';
       }],
     },
@@ -82,6 +82,11 @@ var View = bm2v.View;
           },
         },
       ],
+      events: {
+        '': ['click', function () {
+          todoModel.update('done', !todoModel.get('done'));
+        }],
+      },
     });
     return todoView;
   }

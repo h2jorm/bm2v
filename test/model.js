@@ -30,20 +30,20 @@ describe('model', function () {
   it('update', function () {
     var text1 = 'hello world changed';
     model.update('title', text1);
-    expect(model.model.title).toBe(text1);
+    expect(model.get('title')).toBe(text1);
 
     var todoNode = document.createTextNode('hello world');
     model.bindPuppet('title', 'text', todoNode);
     var text2 = 'hello again';
     model.update('title', text2);
-    expect(model.model.title).toBe(text2);
+    expect(model.get('title')).toBe(text2);
     expect(todoNode.textContent).toBe(text2);
 
     var inputNode = document.createElement('input');
     model.bindPuppet('title', 'form', inputNode);
     var text3 = 'hello 3rd time';
     model.update('title', text3);
-    expect(model.model.title).toBe(text3);
+    expect(model.get('title')).toBe(text3);
     expect(todoNode.textContent).toBe(text3);
     expect(inputNode.value).toBe(text3);
   });

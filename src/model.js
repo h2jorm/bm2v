@@ -21,6 +21,9 @@ export class Model {
     else
       old.add(type, textNode);
   }
+  get(key) {
+    return this.model[key];
+  }
   update(key, value) {
     this.model[key] = value;
     const puppet = this.puppets[key];

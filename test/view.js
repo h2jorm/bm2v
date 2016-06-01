@@ -118,13 +118,13 @@ describe('View', function () {
       expect(titleCache.length).toBe(1);
       expect(titleCache[0][0]).toBe('text');
       expect(titleCache[0][1].parentNode).toBe(view.dom.querySelector('[data-model="title"]'));
-      expect(view.dom.querySelector('[data-model="title"]').textContent).toBe(todoModel.model.title);
+      expect(view.dom.querySelector('[data-model="title"]').textContent).toBe(todoModel.get('title'));
 
       var contentCache = todoModel.puppets.content.cache;
       expect(contentCache.length).toBe(1);
       expect(contentCache[0][0]).toBe('form');
       expect(contentCache[0][1]).toBe(view.dom.querySelector('input'));
-      expect(view.dom.querySelector('input').value).toBe(todoModel.model.content);
+      expect(view.dom.querySelector('input').value).toBe(todoModel.get('content'));
     });
     it('1 model - 1 key - >1 nodes', function () {
       var template = '<li><span data-model="title"></span><input></li>';
@@ -149,10 +149,10 @@ describe('View', function () {
       expect(cache.length).toBe(2);
       expect(cache[0][0]).toBe('text');
       expect(cache[0][1].parentNode).toBe(view.dom.querySelector('[data-model="title"]'));
-      expect(view.dom.querySelector('[data-model="title"]').textContent).toBe(todoModel.model.title);
+      expect(view.dom.querySelector('[data-model="title"]').textContent).toBe(todoModel.get('title'));
       expect(cache[1][0]).toBe('form');
       expect(cache[1][1]).toBe(view.dom.querySelector('input'));
-      expect(view.dom.querySelector('input').value).toBe(todoModel.model.title);
+      expect(view.dom.querySelector('input').value).toBe(todoModel.get('title'));
     });
     it('>1 models', function () {
       var template = '<li><span data-model="title"></span><span data-model="personName"></span></li>';
@@ -189,11 +189,11 @@ describe('View', function () {
       expect(todoTitleCache.length).toBe(1);
       expect(todoTitleCache[0][0]).toBe('text');
       expect(todoTitleCache[0][1].parentNode).toBe(view.dom.querySelector('[data-model="title"]'));
-      expect(todoTitleCache[0][1].parentNode.textContent).toBe(todoModel.model.title);
+      expect(todoTitleCache[0][1].parentNode.textContent).toBe(todoModel.get('title'));
       expect(personNameCache.length).toBe(1);
       expect(personNameCache[0][0]).toBe('text');
       expect(personNameCache[0][1].parentNode).toBe(view.dom.querySelector('[data-model="personName"]'));
-      expect(personNameCache[0][1].parentNode.textContent).toBe(personModel.model.name);
+      expect(personNameCache[0][1].parentNode.textContent).toBe(personModel.get('name'));
     });
   });
   it('events', function () {
