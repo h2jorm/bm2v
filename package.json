@@ -2,10 +2,11 @@
   "name": "bm2v",
   "version": "0.1.0",
   "description": "bind models to views",
-  "main": "index.js",
+  "main": "dist/index.js",
   "scripts": {
     "dev": "lite-server",
     "build": "webpack",
+    "prepublish": "NODE_ENV=production webpack",
     "test": "karma start"
   },
   "keywords": [],

@@ -5,7 +5,7 @@ const isProd = process.env.NODE_ENV === 'production';
 
 module.exports = {
   entry: {
-    bundle: './src/index.js',
+    index: './src/index.js',
     example: './example/index.js',
   },
   output: {
@@ -35,8 +35,18 @@ module.exports = {
       },
     ],
   },
+  plugins: [],
 };
 
 if (!isProd) {
   module.exports.devtool = '#source-map';
+}
+
+if (isProd) {
+  module.exports.output.path = path.join(__dirname, 'dist');
+  module.exports.plugins.push(
+    new webpack.optimize.UglifyJsPlugin({
+      compress: {warnings: false}
+    })
+  );
 }
