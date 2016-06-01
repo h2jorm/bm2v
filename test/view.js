@@ -5,17 +5,23 @@ describe('View', function () {
     var view1 = new View({
       template: template1,
     });
-    expect(view1.dom.innerHTML).toBe(template1);
+    expect(getViewHtml(view1)).toBe(template1);
 
     var template2 = 'hello';
     var view2 = new View({
       template: template2,
     });
-    expect(view2.dom.innerHTML).toBe(template2);
+    expect(getViewHtml(view2)).toBe('<div>hello</div>');
+
+    function getViewHtml(view) {
+      var div = document.createElement('div');
+      div.appendChild(view.dom);
+      return div.innerHTML;
+    }
   });
   describe('append', function () {
     var view;
-    var template = '<ul></ul>';
+    var template = '<div><ul></ul></div>';
     beforeEach(function () {
       view = new View({
         template: template,
@@ -26,7 +32,7 @@ describe('View', function () {
         template: '<li>hello world</li>'
       });
       view.append('ul', innerView);
-      expect(view.dom.innerHTML).toBe('<ul><div><li>hello world</li></div></ul>');
+      expect(view.dom.innerHTML).toBe('<ul><li>hello world</li></ul>');
     });
     it('2 parameters - dom', function () {
       var dom = document.createElement('li');
@@ -191,16 +197,22 @@ describe('View', function () {
     });
   });
   it('events', function () {
-    var template = '<div>click me</div>';
+    var template = '<div>add 1<button>add 2</button></div>';
     var count = 0;
     var view = new View({
       template: template,
       events: {
-        'div': ['click', function () {count++;}],
+        '': ['click', function () {count++;}],
+        'button': ['click', function (event) {
+          event.stopPropagation();
+          count += 2;
+        }],
       },
     });
     expect(count).toBe(0);
-    view.dom.querySelector('div').click();
+    view.dom.click();
     expect(count).toBe(1);
+    view.dom.querySelector('button').click();
+    expect(count).toBe(3);
   });
 });

@@ -38,7 +38,7 @@ export class View {
     parentNode.appendChild(childNode);
   }
   bindEvent(selector, eventName, callback) {
-    const dom = this.dom.querySelector(selector);
+    const dom = selector === '' ? this.dom : this.dom.querySelector(selector);
     if (!dom)
       return;
     dom.addEventListener(eventName, event => {
@@ -88,7 +88,7 @@ function createFragment(html) {
 function createContainer(html) {
   var container = document.createElement('div');
   container.innerHTML = html;
-  // if (container.childNodes.length === 1 && container.childNodes[0].nodeType === 1)
-  //   return container.childNodes[0];
+  if (container.childNodes.length === 1 && container.childNodes[0].nodeType === 1)
+    return container.childNodes[0];
   return container;
 }
