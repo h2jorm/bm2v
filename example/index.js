@@ -16,7 +16,6 @@ var View = bm2v.View;
         bind: {
           name: [
             ['text', '[data-model="name"]'],
-            ['form', 'input'],
           ],
         },
       },
@@ -34,6 +33,7 @@ var View = bm2v.View;
 // example: todo
 (function () {
   var todoExample = document.getElementById('todo');
+  todoExample.setAttribute('data-app', 'todo');
   var todos = [
     {title: 'hello world', done: false,},
     {title: 'hello world again', done: false,},
@@ -78,7 +78,10 @@ var View = bm2v.View;
             title: [
               ['text', '[data-model="title"]'],
             ],
-            done: [['text', '[data-model="done"]']],
+            done: [
+              ['text', '[data-model="done"]'],
+              // ['class', ''],
+            ],
           },
         },
       ],

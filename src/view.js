@@ -1,3 +1,5 @@
+import {Bind} from './bind';
+
 export class View {
   constructor(conf) {
     const {template, models, events} = conf;
@@ -18,7 +20,7 @@ export class View {
     const errMsg = 'invalid parameters in bm2v.View.append method';
     switch (arguments.length) {
       case 2:
-      parentNode = this.dom.querySelector(selector);
+      parentNode = this.queryDom(selector);
       childNode = view instanceof View ? view.dom : view;
       break;
       case 1:
@@ -38,7 +40,7 @@ export class View {
     parentNode.appendChild(childNode);
   }
   bindEvent(selector, eventName, callback) {
-    const dom = selector === '' ? this.dom : this.dom.querySelector(selector);
+    const dom = this.queryDom(selector);
     if (!dom)
       return;
     dom.addEventListener(eventName, event => {
@@ -50,29 +52,19 @@ export class View {
     for (key in conf) {
       const binds = conf[key];
       binds.forEach(bind => {
-        const [type, selector] = bind;
-        if (type === 'text') {
-          const container = this.dom.querySelector(selector);
-          if (!container)
-            throw new Error(`can not find ${selector}`);
-          removeChildNodes(container);
-          const textNode = document.createTextNode(model.model[key]);
-          container.appendChild(textNode);
-          model.bindPuppet(key, type, textNode);
-        }
-        if (type === 'form')
-          model.bindPuppet(key, type, this.dom.querySelector(selector));
+        // const [type, selector] = bind;
+        model.bindPuppet(key, new Bind(bind, this));
         model.update(key, model.model[key]);
       });
     }
   }
-}
-
-function removeChildNodes(dom) {
-  const childNodes = dom.childNodes;
-  if (!childNodes || !childNodes.length)
-    return;
-  Array.prototype.forEach.call(childNodes, childNode => childNode.remove());
+  queryDom(selector) {
+    if (selector === '')
+      return this.dom;
+    if (!selector)
+      return null;
+    return this.dom.querySelector(selector);
+  }
 }
 
 function createFragment(html) {

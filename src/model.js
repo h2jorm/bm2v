@@ -1,11 +1,11 @@
 export class Puppet {
-  constructor(type, node) {
+  constructor(bind) {
     this.cache = [];
-    if (type && node)
-      this.add(type, node);
+    if (bind)
+      this.add(bind);
   }
-  add(type, node) {
-    this.cache.push([type, node]);
+  add(bind) {
+    this.cache.push(bind);
   }
 }
 
@@ -14,12 +14,12 @@ export class Model {
     this.model = value;
     this.puppets = {};
   }
-  bindPuppet(key, type, textNode) {
+  bindPuppet(key, bind) {
     const old = this.puppets[key];
     if (!old)
-      this.puppets[key] = new Puppet(type, textNode);
+      this.puppets[key] = new Puppet(bind);
     else
-      old.add(type, textNode);
+      old.add(bind);
   }
   get(key) {
     return this.model[key];
@@ -29,13 +29,9 @@ export class Model {
     const puppet = this.puppets[key];
     if (!puppet)
       return;
-    puppet.cache.forEach(puppet => {
-      const [type, node] = puppet;
-      if (type === 'text')
-        node.textContent = value;
-      if (type === 'form') {
-        node.value !== value ? node.value = value : '';
-      }
+    puppet.cache.forEach(bind => {
+      if (typeof bind.update === 'function')
+        bind.update(value);
     });
   }
 }
