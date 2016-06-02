@@ -1,42 +1,22 @@
-let strategies = {};
-
 export class Bind {
   static register(type, fn) {
-    if (strategies[type])
+    if (Bind.strategies[type])
       throw new Error(`${type} has been registered in Bind strategies`);
-    strategies[type] = fn;
+    Bind.strategies[type] = fn;
   }
-  constructor(conf, ctx) {
+  static cancel(type) {
+    delete Bind.strategies[type];
+  }
+  constructor(conf, viewCtx) {
     const [type, ...strategyParams] = conf;
-    const strategy = strategies[type];
+    const strategy = Bind.strategies[type];
     if (!strategy)
       throw new Error(`${type} is not registered in Bind strategies`);
     if (typeof strategy === 'function') {
-      strategyParams.unshift(ctx);
+      strategyParams.unshift(viewCtx);
       strategy.apply(this, strategyParams);
     }
   }
 }
 
-Bind.register('text', function (view, selector) {
-  const container = view.queryDom(selector);
-  if (!container)
-    throw new Error(`can not find ${selector}`);
-  removeChildNodes(container);
-  const textNode = document.createTextNode('');
-  container.appendChild(textNode);
-  this.update = function (value) {
-    textNode.textContent = value;
-  };
-});
-
-Bind.register('empty', function () {
-  this.update = function () {};
-});
-
-function removeChildNodes(dom) {
-  const childNodes = dom.childNodes;
-  if (!childNodes || !childNodes.length)
-    return;
-  Array.prototype.forEach.call(childNodes, childNode => childNode.remove());
-}
+Bind.strategies = {};
