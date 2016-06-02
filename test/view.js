@@ -69,11 +69,15 @@ describe('View', function () {
   });
   describe('models', function () {
     var Model = bm2v.Model;
+    function getText(view, selector) {
+      return view.queryDom(selector).textContent;
+    }
     it('1 model - 1 key - node', function () {
       var template = '<li><span data-model="title"></span></li>';
       var todoModel = new Model({
         title: 'hello world',
       });
+      var titleSelector = '[data-model="title"]';
       var view = new View({
         template: template,
         models: [
@@ -81,23 +85,25 @@ describe('View', function () {
             model: todoModel,
             bind: {
               title: [
-                ['text', '[data-model="title"]'],
+                ['text', titleSelector],
               ],
             },
           },
         ],
       });
-      var cache = todoModel.puppets.title.cache;
-      expect(cache.length).toBe(1);
-      expect(cache[0][0]).toBe('text');
-      expect(cache[0][1].parentNode).toBe(view.dom.querySelector('[data-model="title"]'));
+      expect(todoModel.puppets.title.cache.length).toBe(1);
+      expect(getText(view, titleSelector)).toBe('hello world');
+      todoModel.update('title', 'hello again');
+      expect(getText(view, titleSelector)).toBe('hello again');
     });
     it('1 model - >1 key', function () {
-      var template = '<li><span data-model="title"></span><input></li>';
+      var template = '<li><span data-model="title"></span><span data-model="content"></span></li>';
       var todoModel = new Model({
         title: 'hello world',
         content: 'hello...',
       });
+      var titleSelector = '[data-model="title"]';
+      var contentSelector = '[data-model="content"]';
       var view = new View({
         template: template,
         models: [
@@ -105,32 +111,33 @@ describe('View', function () {
             model: todoModel,
             bind: {
               title: [
-                ['text', '[data-model="title"]'],
+                ['text', titleSelector],
               ],
               content: [
-                ['form', 'input'],
+                ['text', contentSelector],
               ],
             },
           },
         ],
       });
-      var titleCache = todoModel.puppets.title.cache;
-      expect(titleCache.length).toBe(1);
-      expect(titleCache[0][0]).toBe('text');
-      expect(titleCache[0][1].parentNode).toBe(view.dom.querySelector('[data-model="title"]'));
-      expect(view.dom.querySelector('[data-model="title"]').textContent).toBe(todoModel.get('title'));
-
-      var contentCache = todoModel.puppets.content.cache;
-      expect(contentCache.length).toBe(1);
-      expect(contentCache[0][0]).toBe('form');
-      expect(contentCache[0][1]).toBe(view.dom.querySelector('input'));
-      expect(view.dom.querySelector('input').value).toBe(todoModel.get('content'));
+      expect(todoModel.puppets.title.cache.length).toBe(1);
+      expect(todoModel.puppets.content.cache.length).toBe(1);
+      expect(getText(view, titleSelector)).toBe('hello world');
+      expect(getText(view, contentSelector)).toBe('hello...');
+      todoModel.update('title', 'hello title');
+      expect(getText(view, titleSelector)).toBe('hello title');
+      expect(getText(view, contentSelector)).toBe('hello...');
+      todoModel.update('content', 'hello content');
+      expect(getText(view, titleSelector)).toBe('hello title');
+      expect(getText(view, contentSelector)).toBe('hello content');
     });
     it('1 model - 1 key - >1 nodes', function () {
-      var template = '<li><span data-model="title"></span><input></li>';
+      var template = '<li><span data-model="title1"></span><span data-model="title2"></span></li>';
       var todoModel = new Model({
         title: 'hello world',
       });
+      var titleSelector1 = '[data-model="title1"]';
+      var titleSelector2 = '[data-model="title2"]';
       var view = new View({
         template: template,
         models: [
@@ -138,21 +145,19 @@ describe('View', function () {
             model: todoModel,
             bind: {
               title: [
-                ['text', '[data-model="title"]'],
-                ['form', 'input'],
+                ['text', titleSelector1],
+                ['text', titleSelector2],
               ],
             },
           },
         ],
       });
-      var cache = todoModel.puppets.title.cache;
-      expect(cache.length).toBe(2);
-      expect(cache[0][0]).toBe('text');
-      expect(cache[0][1].parentNode).toBe(view.dom.querySelector('[data-model="title"]'));
-      expect(view.dom.querySelector('[data-model="title"]').textContent).toBe(todoModel.get('title'));
-      expect(cache[1][0]).toBe('form');
-      expect(cache[1][1]).toBe(view.dom.querySelector('input'));
-      expect(view.dom.querySelector('input').value).toBe(todoModel.get('title'));
+      expect(todoModel.puppets.title.cache.length).toBe(2);
+      expect(getText(view, titleSelector1)).toBe('hello world');
+      expect(getText(view, titleSelector2)).toBe('hello world');
+      todoModel.update('title', 'hello title');
+      expect(getText(view, titleSelector1)).toBe('hello title');
+      expect(getText(view, titleSelector2)).toBe('hello title');
     });
     it('>1 models', function () {
       var template = '<li><span data-model="title"></span><span data-model="personName"></span></li>';
@@ -162,6 +167,8 @@ describe('View', function () {
       var personModel = new Model({
         name: 'leeching',
       });
+      var titleSelector = '[data-model="title"]';
+      var nameSelector = '[data-model="personName"]';
       var view = new View({
         template: template,
         models: [
@@ -169,7 +176,7 @@ describe('View', function () {
             model: todoModel,
             bind: {
               title: [
-                ['text', '[data-model="title"]'],
+                ['text', titleSelector],
               ],
             },
           },
@@ -177,23 +184,22 @@ describe('View', function () {
             model: personModel,
             bind: {
               name: [
-                ['text', '[data-model="personName"]'],
+                ['text', nameSelector],
               ],
             },
           },
         ],
       });
-
-      var todoTitleCache = todoModel.puppets.title.cache;
-      var personNameCache = personModel.puppets.name.cache;
-      expect(todoTitleCache.length).toBe(1);
-      expect(todoTitleCache[0][0]).toBe('text');
-      expect(todoTitleCache[0][1].parentNode).toBe(view.dom.querySelector('[data-model="title"]'));
-      expect(todoTitleCache[0][1].parentNode.textContent).toBe(todoModel.get('title'));
-      expect(personNameCache.length).toBe(1);
-      expect(personNameCache[0][0]).toBe('text');
-      expect(personNameCache[0][1].parentNode).toBe(view.dom.querySelector('[data-model="personName"]'));
-      expect(personNameCache[0][1].parentNode.textContent).toBe(personModel.get('name'));
+      expect(todoModel.puppets.title.cache.length).toBe(1);
+      expect(personModel.puppets.name.cache.length).toBe(1);
+      expect(getText(view, titleSelector)).toBe('hello');
+      expect(getText(view, nameSelector)).toBe('leeching');
+      todoModel.update('title', 'hello title');
+      expect(getText(view, titleSelector)).toBe('hello title');
+      expect(getText(view, nameSelector)).toBe('leeching');
+      personModel.update('name', 'another one');
+      expect(getText(view, titleSelector)).toBe('hello title');
+      expect(getText(view, nameSelector)).toBe('another one');
     });
   });
   it('events', function () {

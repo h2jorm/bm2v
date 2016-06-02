@@ -30,6 +30,10 @@ Bind.register('text', function (view, selector) {
   };
 });
 
+Bind.register('empty', function () {
+  this.update = function () {};
+});
+
 function removeChildNodes(dom) {
   const childNodes = dom.childNodes;
   if (!childNodes || !childNodes.length)
