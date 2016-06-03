@@ -68,7 +68,7 @@ var View = bm2v.View;
 
   function createTodo(todo) {
     var todoModel = new Model(todo);
-    var tmpl = '<li><span data-model="title"></span>-<span data-model="done"></span></li>';
+    var tmpl = '<li><span data-model="title"></span></li>';
     var todoView = new View({
       template: tmpl,
       models: [
@@ -79,8 +79,7 @@ var View = bm2v.View;
               ['text', '[data-model="title"]'],
             ],
             done: [
-              ['text', '[data-model="done"]'],
-              // ['class', ''],
+              ['class', '', 'done'],
             ],
           },
         },

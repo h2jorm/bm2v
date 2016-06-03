@@ -1,4 +1,5 @@
-import './text';
+import './class';
+import './empty';
 import './form';
 import './json';
-import './empty';
+import './text';
