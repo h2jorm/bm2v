@@ -1,8 +1,11 @@
 import {Bind} from '../bind';
 
-Bind.register('text', function (view, selector) {
+Bind.register('text', function (view, selector, transform) {
   const doms = view.query(selector);
   const cache = [];
+  const getText = typeof transform === 'function' ?
+    function (value) { return transform(value); } :
+    function (value) { return value; };
   doms.forEach((dom) => {
     removeChildNodes(dom);
     const textNode = document.createTextNode('');
@@ -11,7 +14,7 @@ Bind.register('text', function (view, selector) {
   });
   this.update = function (value) {
     cache.forEach(textNode => {
-      textNode.textContent = value;
+      textNode.textContent = getText(value);
     });
   };
 });
