@@ -34,17 +34,36 @@ var View = bm2v.View;
 (function () {
   var todoExample = document.getElementById('todo');
   todoExample.setAttribute('data-app', 'todo');
-  var todos = [
-    {title: 'hello world', done: false,},
-    {title: 'hello world again', done: false,},
-    {title: 'hello', done: true,},
-  ];
-  var todoAppView = new View({
-    template: '<ul></ul>'
+  var todos = new Model({
+    todos: [
+      {title: 'hello world', done: false,},
+      {title: 'hello world again', done: false,},
+      {title: 'hello', done: true,},
+    ],
   });
-  todos.forEach(function (_todo) {
-    var todo = createTodo(_todo);
-    todoAppView.append(todo);
+  var todoAppView = new View({
+    template: '<ul></ul><div><span data-all></span>/<span data-done></span></div>',
+    models: [
+      {
+        model: todos,
+        bind: {
+          todos: [
+            ['for', 'ul', createTodo],
+            ['text', '[data-all]', function (todos) {
+              return todos.length;
+            }],
+            ['text', '[data-done]', function (todos) {
+              var count = 0;
+              todos.forEach(function (todo) {
+                if (todo.done)
+                  count++;
+              });
+              return count;
+            }],
+          ]
+        }
+      }
+    ],
   });
 
   var addTodoView = new View({
@@ -57,7 +76,7 @@ var View = bm2v.View;
         var newTodo = {
           title: newTodoTitle, done: false
         };
-        todoAppView.append(createTodo(newTodo));
+        todos.updateCollection('todos', todos.get('todos').length, newTodo);
         input.value = '';
       }],
     },
@@ -66,7 +85,7 @@ var View = bm2v.View;
   todoExample.appendChild(todoAppView.dom);
   todoExample.appendChild(addTodoView.dom);
 
-  function createTodo(todo) {
+  function createTodo(todo, index) {
     var todoModel = new Model(todo);
     var tmpl = '<li><span data-model="title"></span></li>';
     var todoView = new View({
@@ -86,7 +105,9 @@ var View = bm2v.View;
       ],
       events: {
         '': ['click', function () {
-          todoModel.update('done', !todoModel.get('done'));
+          var todo = todos.get('todos')[index];
+          todo.done = !todoModel.get('done');
+          todos.updateCollection('todos', index, todo);
         }],
       },
     });

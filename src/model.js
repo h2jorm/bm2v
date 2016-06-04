@@ -34,4 +34,14 @@ export class Model {
         bind.update(value);
     });
   }
+  updateCollection(key, index, value) {
+    this.model[key][index] = value;
+    const puppet = this.puppets[key];
+    if (!puppet)
+      return;
+    puppet.cache.forEach(bind => {
+      if (typeof bind.update === 'function')
+        bind.update(this.model[key]);
+    });
+  }
 }
