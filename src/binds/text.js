@@ -1,14 +1,18 @@
 import {Bind} from '../bind';
 
 Bind.register('text', function (view, selector) {
-  const container = view.queryDom(selector);
-  if (!container)
-    throw new Error(`can not find ${selector}`);
-  removeChildNodes(container);
-  const textNode = document.createTextNode('');
-  container.appendChild(textNode);
+  const doms = view.query(selector);
+  const cache = [];
+  doms.forEach((dom) => {
+    removeChildNodes(dom);
+    const textNode = document.createTextNode('');
+    dom.appendChild(textNode);
+    cache.push(textNode);
+  });
   this.update = function (value) {
-    textNode.textContent = value;
+    cache.forEach(textNode => {
+      textNode.textContent = value;
+    });
   };
 });
 

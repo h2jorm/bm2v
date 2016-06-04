@@ -20,7 +20,7 @@ export class View {
     const errMsg = 'invalid parameters in bm2v.View.append method';
     switch (arguments.length) {
       case 2:
-      parentNode = this.queryDom(selector);
+      parentNode = this.query(selector)[0];
       childNode = view instanceof View ? view.dom : view;
       break;
       case 1:
@@ -40,11 +40,11 @@ export class View {
     parentNode.appendChild(childNode);
   }
   bindEvent(selector, eventName, callback) {
-    const dom = this.queryDom(selector);
-    if (!dom)
-      return;
-    dom.addEventListener(eventName, event => {
-      callback.call(this, event);
+    const doms = this.query(selector);
+    doms.forEach(dom => {
+      dom.addEventListener(eventName, event => {
+        callback.call(this, event);
+      });
     });
   }
   bindModel(model, conf) {
@@ -52,18 +52,17 @@ export class View {
     for (key in conf) {
       const binds = conf[key];
       binds.forEach(bind => {
-        // const [type, selector] = bind;
         model.bindPuppet(key, new Bind(bind, this));
         model.update(key, model.model[key]);
       });
     }
   }
-  queryDom(selector) {
+  query(selector) {
     if (selector === '')
-      return this.dom;
+      return [this.dom];
     if (!selector)
-      return null;
-    return this.dom.querySelector(selector);
+      return [];
+    return Array.prototype.slice.call(this.dom.querySelectorAll(selector));
   }
 }
 

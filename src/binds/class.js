@@ -2,11 +2,13 @@ import {Bind} from '../bind';
 
 Bind.register('class', function (view, selector, classNames) {
   classNames = toClassNameList(classNames);
-  const dom = view.queryDom(selector);
+  const doms = view.query(selector);
   this.update = function (value) {
-    const classList = dom.classList;
-    const exec = !!value ? classList.add : classList.remove;
-    exec.apply(classList, classNames);
+    doms.forEach(dom => {
+      const classList = dom.classList;
+      const exec = !!value ? classList.add : classList.remove;
+      exec.apply(classList, classNames);
+    });
   };
 });
 

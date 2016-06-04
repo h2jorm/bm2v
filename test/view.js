@@ -70,7 +70,7 @@ describe('View', function () {
   describe('models', function () {
     var Model = bm2v.Model;
     function getText(view, selector) {
-      return view.queryDom(selector).textContent;
+      return view.query(selector)[0].textContent;
     }
     it('1 model - 1 key - node', function () {
       var template = '<li><span data-model="title"></span></li>';
