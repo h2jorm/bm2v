@@ -19,7 +19,6 @@ const view = new View({
       bind: {
         myName: [
           ['text', '[data-model="name"]'],
-          ['form', 'input'],
         ],
       },
     },
@@ -33,3 +32,10 @@ const view = new View({
 });
 app.appendChild(view.dom);
 ```
+
+## Glossary
+
+* model: a simple wrap of a plain old javascript object
+* view: binding models and events to a custom template
+* binder: a transformer declaring how models displayed in views
+* binder cog: binder configurations, like `['text', '[data-model="name"]']`
