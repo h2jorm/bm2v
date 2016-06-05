@@ -1,6 +1,9 @@
-import {Binder} from './binder';
-import {Puppet, Model} from './model';
-import {View} from './view';
+import {
+  Binder,
+  Puppet,
+  Model,
+  View
+} from './core';
 import './binders';
 
 exports.Binder = Binder;

@@ -1,4 +1,4 @@
-import {Binder} from '../binder';
+import {Binder} from '../core/binder';
 
 Binder.register('for', function (view, selector, createChildView) {
   const doms = view.query(selector);

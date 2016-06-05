@@ -1,4 +1,4 @@
-import {Binder} from '../binder';
+import {Binder} from '../core/binder';
 
 Binder.register('class', function (view, selector, classNames) {
   classNames = toClassNameList(classNames);

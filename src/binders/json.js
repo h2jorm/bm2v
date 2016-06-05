@@ -1,4 +1,4 @@
-import {Binder} from '../binder';
+import {Binder} from '../core/binder';
 
 Binder.register('json', function (view, selector) {
   const container = view.querySelector(selector);

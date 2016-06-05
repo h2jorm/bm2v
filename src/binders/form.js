@@ -1,4 +1,4 @@
-import {Binder} from '../binder';
+import {Binder} from '../core/binder';
 
 Binder.register('form', function (view, selector) {
   const input = view.querySelector(selector);

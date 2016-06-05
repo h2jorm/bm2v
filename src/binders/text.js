@@ -1,4 +1,4 @@
-import {Binder} from '../binder';
+import {Binder} from '../core/binder';
 
 Binder.register('text', function (view, selector, transform) {
   const doms = view.query(selector);
