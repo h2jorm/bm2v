@@ -66,16 +66,6 @@ export class View {
   }
 }
 
-function createFragment(html) {
-  var container = document.createElement('div');
-  container.innerHTML = html;
-  var fragment = document.createDocumentFragment();
-  while (container.firstChild) {
-    fragment.appendChild(container.firstChild);
-  }
-  return fragment;
-}
-
 function createContainer(html) {
   var container = document.createElement('div');
   container.innerHTML = html;

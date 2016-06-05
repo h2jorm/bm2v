@@ -33,7 +33,6 @@ var View = bm2v.View;
 // example: todo
 (function () {
   var todoExample = document.getElementById('todo');
-  todoExample.setAttribute('data-app', 'todo');
   var todos = new Model({
     todos: [
       {title: 'hello world', done: false,},
@@ -42,7 +41,7 @@ var View = bm2v.View;
     ],
   });
   var todoAppView = new View({
-    template: '<ul></ul><div><span data-all></span>/<span data-done></span></div>',
+    template: '<pre data-json></pre><ul></ul><div><span data-all></span>/<span data-done></span></div>',
     models: [
       {
         model: todos,
@@ -60,9 +59,12 @@ var View = bm2v.View;
               });
               return count;
             }],
-          ]
-        }
-      }
+            ['text', '[data-json]', function (todos) {
+              return JSON.stringify(todos, null, 2);
+            }],
+          ],
+        },
+      },
     ],
   });
 
