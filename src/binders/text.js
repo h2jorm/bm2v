@@ -1,6 +1,6 @@
-import {Bind} from '../bind';
+import {Binder} from '../binder';
 
-Bind.register('text', function (view, selector, transform) {
+Binder.register('text', function (view, selector, transform) {
   const doms = view.query(selector);
   const cache = [];
   const getText = typeof transform === 'function' ?

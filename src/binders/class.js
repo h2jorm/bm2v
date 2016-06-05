@@ -1,6 +1,6 @@
-import {Bind} from '../bind';
+import {Binder} from '../binder';
 
-Bind.register('class', function (view, selector, classNames) {
+Binder.register('class', function (view, selector, classNames) {
   classNames = toClassNameList(classNames);
   const doms = view.query(selector);
   this.update = function (value) {

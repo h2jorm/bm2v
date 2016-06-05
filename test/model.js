@@ -1,6 +1,6 @@
 describe('model', function () {
   var Model = bm2v.Model;
-  var Bind = bm2v.Bind;
+  var Binder = bm2v.Binder;
   var model, todo;
   beforeEach(function () {
     todo = {
@@ -20,11 +20,11 @@ describe('model', function () {
   });
   it('bindPuppet', function () {
     expect(model.puppets.title).toBeUndefined();
-    model.bindPuppet('title', new Bind(['empty']));
+    model.bindPuppet('title', new Binder(['empty']));
     var cache = model.puppets.title.cache;
     expect(cache.length).toBe(1);
 
-    model.bindPuppet('title', new Bind(['empty']));
+    model.bindPuppet('title', new Binder(['empty']));
     expect(cache.length).toBe(2);
   });
 });

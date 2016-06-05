@@ -1,6 +1,6 @@
-import {Bind} from '../bind';
+import {Binder} from '../binder';
 
-Bind.register('for', function (view, selector, createChildView) {
+Binder.register('for', function (view, selector, createChildView) {
   const doms = view.query(selector);
   this.update = function (collection) {
     let childViews = [];

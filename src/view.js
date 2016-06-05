@@ -1,4 +1,4 @@
-import {Bind} from './bind';
+import {Binder} from './binder';
 
 export class View {
   constructor(conf) {
@@ -52,7 +52,7 @@ export class View {
     for (key in conf) {
       const binds = conf[key];
       binds.forEach(bind => {
-        model.bindPuppet(key, new Bind(bind, this));
+        model.bindPuppet(key, new Binder(bind, this));
         model.update(key, model.model[key]);
       });
     }

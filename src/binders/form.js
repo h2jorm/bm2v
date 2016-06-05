@@ -1,6 +1,6 @@
-import {Bind} from '../bind';
+import {Binder} from '../binder';
 
-Bind.register('form', function (view, selector) {
+Binder.register('form', function (view, selector) {
   const input = view.querySelector(selector);
   this.update = function (value) {
     input.value !== value ? input.value = value : '';

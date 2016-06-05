@@ -1,9 +1,9 @@
-import {Bind} from './bind';
+import {Binder} from './binder';
 import {Puppet, Model} from './model';
 import {View} from './view';
-import './binds';
+import './binders';
 
-exports.Bind = Bind;
+exports.Binder = Binder;
 exports.Puppet = Puppet;
 exports.Model = Model;
 exports.View = View;

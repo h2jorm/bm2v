@@ -1,6 +1,6 @@
-import {Bind} from '../bind';
+import {Binder} from '../binder';
 
-Bind.register('json', function (view, selector) {
+Binder.register('json', function (view, selector) {
   const container = view.querySelector(selector);
   if (!container)
     throw new Error(`can not find ${selector}`);
