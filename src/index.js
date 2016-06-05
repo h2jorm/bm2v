@@ -1,12 +1,12 @@
 import {
   Binder,
-  Puppet,
+  BinderCache,
   Model,
   View
 } from './core';
 import './binders';
 
 exports.Binder = Binder;
-exports.Puppet = Puppet;
+exports.BinderCache = BinderCache;
 exports.Model = Model;
 exports.View = View;

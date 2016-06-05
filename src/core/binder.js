@@ -7,13 +7,14 @@ export class Binder {
   static cancel(type) {
     delete Binder.strategies[type];
   }
-  constructor(conf, viewCtx) {
-    const [type, ...strategyParams] = conf;
+  constructor(cog, viewCtx) {
+    const [type, ...strategyParams] = cog;
     const strategy = Binder.strategies[type];
     if (!strategy)
       throw new Error(`${type} is not registered in Binder strategies`);
     if (typeof strategy === 'function') {
       strategyParams.unshift(viewCtx);
+      // `this` points to a view
       strategy.apply(this, strategyParams);
     }
   }

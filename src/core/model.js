@@ -1,4 +1,4 @@
-export class Puppet {
+export class BinderCache {
   constructor(bind) {
     this.cache = [];
     if (bind)
@@ -12,36 +12,36 @@ export class Puppet {
 export class Model {
   constructor(value) {
     this.model = value;
-    this.puppets = {};
+    this.cache = {};
   }
-  bindPuppet(key, bind) {
-    const old = this.puppets[key];
+  cacheBinder(key, binder) {
+    const old = this.cache[key];
     if (!old)
-      this.puppets[key] = new Puppet(bind);
+      this.cache[key] = new BinderCache(binder);
     else
-      old.add(bind);
+      old.add(binder);
   }
   get(key) {
     return this.model[key];
   }
   update(key, value) {
     this.model[key] = value;
-    const puppet = this.puppets[key];
-    if (!puppet)
+    const binders = this.cache[key];
+    if (!binders)
       return;
-    puppet.cache.forEach(bind => {
-      if (typeof bind.update === 'function')
-        bind.update(value);
+    binders.cache.forEach(binder => {
+      if (typeof binder.update === 'function')
+        binder.update(value);
     });
   }
   updateCollection(key, index, value) {
     this.model[key][index] = value;
-    const puppet = this.puppets[key];
-    if (!puppet)
+    const binders = this.cache[key];
+    if (!binders)
       return;
-    puppet.cache.forEach(bind => {
-      if (typeof bind.update === 'function')
-        bind.update(this.model[key]);
+    binders.cache.forEach(binder => {
+      if (typeof binder.update === 'function')
+        binder.update(this.model[key]);
     });
   }
 }

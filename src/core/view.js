@@ -5,8 +5,9 @@ export class View {
     const {template, models, events} = conf;
     this.dom = createContainer(template);
     if (models)
-      models.forEach(model => {
-        this.bindModel(model.model, model.bind);
+      models.forEach(_model => {
+        const {model, bind} = _model;
+        this.bindModel(model, bind);
       });
     if (events)
       for (let selector in events) {
@@ -47,12 +48,12 @@ export class View {
       });
     });
   }
-  bindModel(model, conf) {
+  bindModel(model, bind) {
     let key;
-    for (key in conf) {
-      const binds = conf[key];
-      binds.forEach(bind => {
-        model.bindPuppet(key, new Binder(bind, this));
+    for (key in bind) {
+      const binderCogs = bind[key];
+      binderCogs.forEach(bindCog => {
+        model.cacheBinder(key, new Binder(bindCog, this));
         model.update(key, model.model[key]);
       });
     }

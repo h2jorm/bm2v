@@ -15,16 +15,16 @@ describe('model', function () {
   it('should have a reference in `model`', function () {
     expect(model.model).toBe(todo);
   });
-  it('should set `puppets` as empty object defaultly', function () {
-    expect(model.puppets).toEqual({});
+  it('should set `cache` as empty object defaultly', function () {
+    expect(model.cache).toEqual({});
   });
-  it('bindPuppet', function () {
-    expect(model.puppets.title).toBeUndefined();
-    model.bindPuppet('title', new Binder(['empty']));
-    var cache = model.puppets.title.cache;
+  it('cacheBinder', function () {
+    expect(model.cache.title).toBeUndefined();
+    model.cacheBinder('title', new Binder(['empty']));
+    var cache = model.cache.title.cache;
     expect(cache.length).toBe(1);
 
-    model.bindPuppet('title', new Binder(['empty']));
+    model.cacheBinder('title', new Binder(['empty']));
     expect(cache.length).toBe(2);
   });
 });

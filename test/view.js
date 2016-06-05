@@ -91,7 +91,7 @@ describe('View', function () {
           },
         ],
       });
-      expect(todoModel.puppets.title.cache.length).toBe(1);
+      expect(todoModel.cache.title.cache.length).toBe(1);
       expect(getText(view, titleSelector)).toBe('hello world');
       todoModel.update('title', 'hello again');
       expect(getText(view, titleSelector)).toBe('hello again');
@@ -120,8 +120,8 @@ describe('View', function () {
           },
         ],
       });
-      expect(todoModel.puppets.title.cache.length).toBe(1);
-      expect(todoModel.puppets.content.cache.length).toBe(1);
+      expect(todoModel.cache.title.cache.length).toBe(1);
+      expect(todoModel.cache.content.cache.length).toBe(1);
       expect(getText(view, titleSelector)).toBe('hello world');
       expect(getText(view, contentSelector)).toBe('hello...');
       todoModel.update('title', 'hello title');
@@ -152,7 +152,7 @@ describe('View', function () {
           },
         ],
       });
-      expect(todoModel.puppets.title.cache.length).toBe(2);
+      expect(todoModel.cache.title.cache.length).toBe(2);
       expect(getText(view, titleSelector1)).toBe('hello world');
       expect(getText(view, titleSelector2)).toBe('hello world');
       todoModel.update('title', 'hello title');
@@ -190,8 +190,8 @@ describe('View', function () {
           },
         ],
       });
-      expect(todoModel.puppets.title.cache.length).toBe(1);
-      expect(personModel.puppets.name.cache.length).toBe(1);
+      expect(todoModel.cache.title.cache.length).toBe(1);
+      expect(personModel.cache.name.cache.length).toBe(1);
       expect(getText(view, titleSelector)).toBe('hello');
       expect(getText(view, nameSelector)).toBe('leeching');
       todoModel.update('title', 'hello title');
