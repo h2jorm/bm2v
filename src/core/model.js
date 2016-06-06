@@ -22,6 +22,8 @@ export class Model {
       old.add(binder);
   }
   get(key) {
+    if (!key)
+      return this.model;
     return this.model[key];
   }
   update(key, value) {
@@ -29,25 +31,35 @@ export class Model {
       this.model = value;
     else
       this.model[key] = value;
-    const binders = this.cache[key];
-    if (!binders)
-      return;
-    binders.cache.forEach(binder => {
-      if (typeof binder.update === 'function')
-        binder.update(value);
-    });
+    const bindersOfKey = this.cache[key];
+    const bindersOfModel = key === '' ? null : this.cache[''];
+    if (bindersOfKey)
+      bindersOfKey.cache.forEach(binder => {
+        if (typeof binder.update === 'function')
+          binder.update(value);
+      });
+    if (bindersOfModel)
+      bindersOfModel.cache.forEach(binder => {
+        if (typeof binder.update === 'function')
+          binder.update(this.model);
+      });
   }
   updateCollection(key, index, value) {
     if (key === '')
-      this.model = value;
+      this.model[index] = value;
     else
       this.model[key][index] = value;
-    const binders = this.cache[key];
-    if (!binders)
-      return;
-    binders.cache.forEach(binder => {
-      if (typeof binder.update === 'function')
-        binder.update(this.model[key]);
-    });
+    const bindersOfKey = this.cache[key];
+    const bindersOfModel = key === '' ? null : this.cache[''];
+    if (bindersOfKey)
+      bindersOfKey.cache.forEach(binder => {
+        if (typeof binder.update === 'function')
+          binder.update(this.model[key]);
+      });
+    if (bindersOfModel)
+      bindersOfModel.cache.forEach(binder => {
+        if (typeof binder.update === 'function')
+          binder.update(this.model);
+      });
   }
 }

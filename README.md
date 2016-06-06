@@ -39,3 +39,5 @@ app.appendChild(view.dom);
 * view: binding models and events to a custom template
 * binder: a transformer declaring how models displayed in views
 * binder cog: binder configurations, like `['text', '[data-model="name"]']`
+* key binder: a binder updating value of a model key
+* model binder: a binder updating value of whole model

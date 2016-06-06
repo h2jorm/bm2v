@@ -160,11 +160,8 @@ var View = bm2v.View;
         var content = event.currentTarget.value;
         var name = this.query('input[data-name="name"]')[0].value;
         var frameworks = this.query('input[data-name="frameworks"]')[0].value.split(',');
-        var newVal = {
-          name: name,
-          frameworks: frameworks,
-        };
-        model.update('', newVal);
+        model.update('name', name);
+        model.update('frameworks', frameworks);
       }],
     },
   });
