@@ -4,7 +4,14 @@ Binder.register('form', function (view, selector) {
   const inputs = view.query(selector);
   this.update = function (value) {
     inputs.forEach(input => {
-      input.value !== value ? input.value = value : '';
+      switch (input.type) {
+        case 'text':
+        input.value !== value ? input.value = value : '';
+        break;
+        case 'checkbox':
+        input.checked = !!value;
+        break;
+      }
     });
   };
 });

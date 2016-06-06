@@ -168,3 +168,35 @@ var View = bm2v.View;
   json.appendChild(jsonView.dom);
   json.appendChild(inputView.dom);
 })();
+
+// example: form
+(function () {
+  var form = document.getElementById('form');
+  var model = new Model({
+    isGood: true
+  });
+  var checkboxView = new View({
+    template: '<input type="checkbox">isGood<pre></pre>',
+    models: [
+      {
+        model: model,
+        bind: {
+          isGood: [
+            ['form', 'input'],
+          ],
+          '': [
+            ['text', 'pre', function (model) {
+              return JSON.stringify(model, null, 2);
+            }],
+          ],
+        },
+      }
+    ],
+    events: {
+      'input': ['change', function (event) {
+        model.update('isGood', event.currentTarget.checked);
+      }],
+    },
+  });
+  form.appendChild(checkboxView.dom);
+})();
