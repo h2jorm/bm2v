@@ -1,0 +1,26 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: auto;
+  padding: 0 20px;
+  width: 100%;
+  max-width: 1000px;
+}
+
+h1 {
+  margin: 60px auto;
+}
+
+h2 {
+  margin: 40px auto;
+}
+
+section {
+  margin: 120px auto;
+}
+
+[data-app="todo"] li.done {
+  text-decoration: line-through;
+}

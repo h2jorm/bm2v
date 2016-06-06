@@ -25,7 +25,10 @@ export class Model {
     return this.model[key];
   }
   update(key, value) {
-    this.model[key] = value;
+    if (key === '')
+      this.model = value;
+    else
+      this.model[key] = value;
     const binders = this.cache[key];
     if (!binders)
       return;
@@ -35,7 +38,10 @@ export class Model {
     });
   }
   updateCollection(key, index, value) {
-    this.model[key][index] = value;
+    if (key === '')
+      this.model = value;
+    else
+      this.model[key][index] = value;
     const binders = this.cache[key];
     if (!binders)
       return;

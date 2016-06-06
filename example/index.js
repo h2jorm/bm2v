@@ -41,7 +41,7 @@ var View = bm2v.View;
     ],
   });
   var todoAppView = new View({
-    template: '<pre data-json></pre><ul></ul><div><span data-all></span>/<span data-done></span></div>',
+    template: '<span data-done></span>/<span data-all></span> done<ul></ul>',
     models: [
       {
         model: todos,
@@ -58,9 +58,6 @@ var View = bm2v.View;
                   count++;
               });
               return count;
-            }],
-            ['text', '[data-json]', function (todos) {
-              return JSON.stringify(todos, null, 2);
             }],
           ],
         },
@@ -115,4 +112,62 @@ var View = bm2v.View;
     });
     return todoView;
   }
+})();
+
+// example: json for debug
+(function () {
+  var json = document.getElementById('json');
+  var model = new Model({
+    name: 'front-end framework',
+    frameworks: [
+      'backbone',
+      'angular',
+      'react',
+    ],
+  });
+  var jsonView = new View({
+    template: '<pre></pre>',
+    models: [
+      {
+        model: model,
+        bind: {
+          '': [
+            ['text', '', function (modelVal) {
+              return JSON.stringify(modelVal, null, 2);
+            }],
+          ],
+        },
+      },
+    ],
+  });
+  var inputView = new View({
+    template: '<div><input data-name="name"></div><div><input data-name="frameworks"></div><button>change</button>',
+    models: [
+      {
+        model: model,
+        bind: {
+          name: [
+            ['form', 'input[data-name="name"]'],
+          ],
+          frameworks: [
+            ['form', 'input[data-name="frameworks"]'],
+          ],
+        },
+      }
+    ],
+    events: {
+      'button': ['click', function (event) {
+        var content = event.currentTarget.value;
+        var name = this.query('input[data-name="name"]')[0].value;
+        var frameworks = this.query('input[data-name="frameworks"]')[0].value.split(',');
+        var newVal = {
+          name: name,
+          frameworks: frameworks,
+        };
+        model.update('', newVal);
+      }],
+    },
+  });
+  json.appendChild(jsonView.dom);
+  json.appendChild(inputView.dom);
 })();

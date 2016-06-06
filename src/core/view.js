@@ -54,7 +54,7 @@ export class View {
       const binderCogs = bind[key];
       binderCogs.forEach(bindCog => {
         model.cacheBinder(key, new Binder(bindCog, this));
-        model.update(key, model.model[key]);
+        model.update(key, key === '' ? model.model : model.model[key]);
       });
     }
   }

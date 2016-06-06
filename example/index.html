@@ -3,16 +3,26 @@
   <head>
     <meta charset="utf-8">
     <title>bm2v-examples</title>
-    <style media="screen">
-      [data-app="todo"] li.done {
-        text-decoration: line-through;
-      }
-    </style>
+    <link rel="stylesheet" href="./style.css">
   </head>
   <body>
-    <div id="hello"></div>
-    <hr>
-    <div id="todo" data-app="todo"></div>
+    <h1>Example of bm2v</h1>
+    <section>
+      <h2>Hello</h2>
+      <div id="hello"></div>
+    </section>
+    <section>
+      <h2>Todo</h2>
+      <div id="todo" data-app="todo"></div>
+    </section>
+    <section>
+      <h2>Json for debug</h2>
+      <div id="json"></div>
+    </section>
+    <section>
+      <h2>Form</h2>
+      <div id="form"></div>
+    </section>
     <script src="../build/index.js"></script>
     <script src="./index.js"></script>
   </body>
