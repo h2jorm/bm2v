@@ -132,9 +132,7 @@ var View = bm2v.View;
         model: model,
         bind: {
           '': [
-            ['text', '', function (modelVal) {
-              return JSON.stringify(modelVal, null, 2);
-            }],
+            ['json', ''],
           ],
         },
       },
@@ -185,9 +183,7 @@ var View = bm2v.View;
             ['form', 'input'],
           ],
           '': [
-            ['text', 'pre', function (model) {
-              return JSON.stringify(model, null, 2);
-            }],
+            ['json', 'pre'],
           ],
         },
       }
@@ -214,9 +210,7 @@ var View = bm2v.View;
             ['form', 'input[type="radio"]']
           ],
           '': [
-            ['text', 'pre', function (model) {
-              return JSON.stringify(model, null, 2);
-            }],
+            ['json', 'pre'],
           ],
         },
       },
