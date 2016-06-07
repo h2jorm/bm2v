@@ -59,11 +59,17 @@ export class View {
     }
   }
   query(selector) {
-    if (selector === '')
-      return [this.dom];
-    if (!selector)
-      return [];
-    return Array.prototype.slice.call(this.dom.querySelectorAll(selector));
+    let ret = [];
+    if (!selector) {
+      ret.push(this.dom);
+      return ret;
+    }
+    if (matchesSelector(this.dom, selector))
+      ret.push(this.dom);
+    Array.prototype.forEach.call(this.dom.querySelectorAll(selector), dom => {
+      ret.push(dom);
+    });
+    return ret;
   }
 }
 
@@ -73,4 +79,13 @@ function createContainer(html) {
   if (container.childNodes.length === 1 && container.childNodes[0].nodeType === 1)
     return container.childNodes[0];
   return container;
+}
+
+function matchesSelector(dom, selector) {
+  if (!selector || !dom)
+    return false;
+  const matches = dom.matches || dom.msMatchesSelector || dom.mozMatchesSelector || dom.webkitMatchesSelector;
+  if (!matches)
+    return false;
+  return matches.call(dom, selector);
 }

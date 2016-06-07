@@ -19,6 +19,18 @@ describe('View', function () {
       return div.innerHTML;
     }
   });
+  it('query', function () {
+    var view1 = new View({
+      template: '<li>hello</li>',
+    });
+    expect(view1.query('li').length).toBe(1);
+    expect(view1.query().length).toBe(1);
+    expect(view1.query()[0]).toBe(view1.dom);
+    var view2 = new View({
+      template: '<div><span>hello</span><span>world</span></div>',
+    });
+    expect(view2.query('span').length).toBe(2);
+  });
   describe('append', function () {
     var view;
     var template = '<div><ul></ul></div>';
@@ -54,17 +66,11 @@ describe('View', function () {
         view.append('ul');
       }
       function invalid3() {
-        var dom = document.createElement('li');
-        dom.textContent = 'hello';
-        view.append('div', dom);
-      }
-      function invalid4() {
         view.append('ul', 12);
       }
       expect(invalid1).toThrow();
       expect(invalid2).toThrow();
       expect(invalid3).toThrow();
-      expect(invalid4).toThrow();
     });
   });
   describe('models', function () {

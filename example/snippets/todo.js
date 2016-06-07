@@ -65,7 +65,7 @@
               ['text', '[data-model="title"]'],
             ],
             done: [
-              ['class', '', 'done'],
+              ['class', 'li', 'done'],
             ],
           },
         },
