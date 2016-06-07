@@ -6,19 +6,15 @@
   });
   var checkboxView = new View({
     template: '<label><input type="checkbox">isGood</label><pre></pre>',
-    models: [
-      {
-        model: checkboxModel,
-        bind: {
-          isGood: [
-            ['form', 'input'],
-          ],
-          '': [
-            ['json', 'pre'],
-          ],
-        },
-      }
-    ],
+    model: checkboxModel,
+    bind: {
+      isGood: [
+        ['form', 'input'],
+      ],
+      '': [
+        ['json', 'pre'],
+      ],
+    },
     events: {
       'input': ['change', function (event) {
         checkboxModel.update('isGood', event.currentTarget.checked);
@@ -33,19 +29,15 @@
       + '<label><input type="radio" name="color" value="green">green</label>'
       + '<label><input type="radio" name="color" value="yellow">yellow</label>'
       + '<pre></pre>',
-    models: [
-      {
-        model: radioModel,
-        bind: {
-          color: [
-            ['form', 'input[type="radio"]']
-          ],
-          '': [
-            ['json', 'pre'],
-          ],
-        },
-      },
-    ],
+    model: radioModel,
+    bind: {
+      color: [
+        ['form', 'input[type="radio"]']
+      ],
+      '': [
+        ['json', 'pre'],
+      ],
+    },
     events: {
       'input': ['change', function (event) {
         radioModel.update('color', event.currentTarget.value);

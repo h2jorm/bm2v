@@ -2,9 +2,12 @@ import {Binder} from './binder';
 
 export class View {
   constructor(conf) {
-    const {template, models, events} = conf;
+    const {template, models, events, model, bind} = conf;
     this.dom = createContainer(template);
-    if (models)
+    // this is a sugar api
+    if (model && bind)
+      this.bindModel(model, bind);
+    if (!model && models)
       models.forEach(_model => {
         const {model, bind} = _model;
         this.bindModel(model, bind);

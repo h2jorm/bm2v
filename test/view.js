@@ -208,6 +208,49 @@ describe('View', function () {
       expect(getText(view, nameSelector)).toBe('another one');
     });
   });
+  describe('model & bind', function () {
+    var Model = bm2v.Model;
+    it('model & bind', function () {
+      var model = new Model({
+        name: 'hello',
+      });
+      var view = new View({
+        template: '<div></div>',
+        model: model,
+        bind: {
+          name: [
+            ['text', 'div'],
+          ],
+        },
+      });
+      expect(model.cache.name.cache.length).toBe(1);
+    });
+    it('when both model and models exist', function () {
+      var model = new Model({
+        name: 'hello',
+      });
+      var view = new View({
+        template: '<div></div>',
+        model: model,
+        bind: {
+          name: [
+            ['text', 'div'],
+          ],
+        },
+        models: [
+          {
+            model: model,
+            bind: {
+              name: [
+                ['text', 'div'],
+              ],
+            },
+          },
+        ],
+      });
+      expect(model.cache.name.cache.length).toBe(1);
+    });
+  });
   it('events', function () {
     var template = '<div>add 1<button>add 2</button></div>';
     var count = 0;

@@ -11,22 +11,18 @@
   });
   var inputView = new View({
     template: '<div><input data-name="name"></div><div><input data-name="frameworks"></div><button>change</button><pre></pre>',
-    models: [
-      {
-        model: model,
-        bind: {
-          name: [
-            ['form', 'input[data-name="name"]'],
-          ],
-          frameworks: [
-            ['form', 'input[data-name="frameworks"]'],
-          ],
-          '': [
-            ['json', 'pre'],
-          ],
-        },
-      }
-    ],
+    model: model,
+    bind: {
+      name: [
+        ['form', 'input[data-name="name"]'],
+      ],
+      frameworks: [
+        ['form', 'input[data-name="frameworks"]'],
+      ],
+      '': [
+        ['json', 'pre'],
+      ],
+    },
     events: {
       'button': ['click', function (event) {
         var content = event.currentTarget.value;

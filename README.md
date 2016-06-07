@@ -13,22 +13,18 @@ const helloModel = new Model({
 });
 const view = new View({
   template: 'name: <input><div>hello, <span data-model="name"></span></div>',
-  models: [
-    {
-      model: helloModel,
-      bind: {
-        myName: [
-          ['text', '[data-model="name"]'],
-        ],
-      },
-    },
-  ],
+  model: helloModel,
+  bind: {
+    myName: [
+      ['text', '[data-model="name"]'],
+    ],
+  },
   events: {
     'input': ['keyup', function (event) {
       const newName = event.currentTarget.value;
       helloModel.update('name', newName);
     }],
-  }
+  },
 });
 app.appendChild(view.dom);
 ```

@@ -10,27 +10,23 @@
   });
   var todoAppView = new View({
     template: '<span data-done></span>/<span data-all></span> done<ul></ul>',
-    models: [
-      {
-        model: todos,
-        bind: {
-          todos: [
-            ['for', 'ul', createTodo],
-            ['text', '[data-all]', function (todos) {
-              return todos.length;
-            }],
-            ['text', '[data-done]', function (todos) {
-              var count = 0;
-              todos.forEach(function (todo) {
-                if (todo.done)
-                  count++;
-              });
-              return count;
-            }],
-          ],
-        },
-      },
-    ],
+    model: todos,
+    bind: {
+      todos: [
+        ['for', 'ul', createTodo],
+        ['text', '[data-all]', function (todos) {
+          return todos.length;
+        }],
+        ['text', '[data-done]', function (todos) {
+          var count = 0;
+          todos.forEach(function (todo) {
+            if (todo.done)
+              count++;
+          });
+          return count;
+        }],
+      ],
+    },
   });
 
   var addTodoView = new View({
@@ -57,19 +53,15 @@
     var tmpl = '<li><span data-model="title"></span></li>';
     var todoView = new View({
       template: tmpl,
-      models: [
-        {
-          model: todoModel,
-          bind: {
-            title: [
-              ['text', '[data-model="title"]'],
-            ],
-            done: [
-              ['class', 'li', 'done'],
-            ],
-          },
-        },
-      ],
+      model: todoModel,
+      bind: {
+        title: [
+          ['text', '[data-model="title"]'],
+        ],
+        done: [
+          ['class', 'li', 'done'],
+        ],
+      },
       events: {
         '': ['click', function () {
           var todo = todos.get('todos')[index];
