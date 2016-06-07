@@ -24,3 +24,10 @@ section {
 [data-app="todo"] li.done {
   text-decoration: line-through;
 }
+
+pre.code {
+  background-color: #efefef;
+  overflow-x: scroll;
+  padding: 10px;
+  border-radius: 8px;
+}

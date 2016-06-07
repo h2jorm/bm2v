@@ -1,6 +1,6 @@
 // example: form
-(function () {
-  var form = document.getElementById('form');
+(function form() {
+  var formExample = document.getElementById('form');
   var checkboxModel = new Model({
     isGood: true
   });
@@ -44,6 +44,7 @@
       }],
     },
   });
-  form.appendChild(checkboxView.dom);
-  form.appendChild(radioView.dom);
+  formExample.appendChild(checkboxView.dom);
+  formExample.appendChild(radioView.dom);
+  pushSnippet(form);
 })();

@@ -1,5 +1,5 @@
 // example: todo
-(function () {
+(function todo() {
   var todoExample = document.getElementById('todo');
   var todos = new Model({
     todos: [
@@ -72,4 +72,5 @@
     });
     return todoView;
   }
+  pushSnippet(todo);
 })();

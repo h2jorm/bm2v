@@ -1,6 +1,6 @@
 // example: json for debug
-(function () {
-  var json = document.getElementById('json');
+(function jsonForDebug() {
+  var json = document.getElementById('jsonForDebug');
   var model = new Model({
     name: 'front-end framework',
     frameworks: [
@@ -34,4 +34,5 @@
     },
   });
   json.appendChild(inputView.dom);
+  pushSnippet(jsonForDebug);
 })();

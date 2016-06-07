@@ -1,5 +1,5 @@
 // example: hello
-(function () {
+(function hello() {
   var helloExample = document.getElementById('hello');
   var helloModel = new Model({
     name: '',
@@ -21,4 +21,5 @@
     }
   });
   helloExample.appendChild(view.dom);
+  pushSnippet(hello);
 })();
