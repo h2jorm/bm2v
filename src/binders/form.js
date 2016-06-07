@@ -11,6 +11,9 @@ Binder.register('form', function (view, selector) {
         case 'checkbox':
         input.checked = !!value;
         break;
+        case 'radio':
+        input.checked = input.value === value;
+        break;
       }
     });
   };

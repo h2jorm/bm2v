@@ -172,14 +172,14 @@ var View = bm2v.View;
 // example: form
 (function () {
   var form = document.getElementById('form');
-  var model = new Model({
+  var checkboxModel = new Model({
     isGood: true
   });
   var checkboxView = new View({
-    template: '<input type="checkbox">isGood<pre></pre>',
+    template: '<label><input type="checkbox">isGood</label><pre></pre>',
     models: [
       {
-        model: model,
+        model: checkboxModel,
         bind: {
           isGood: [
             ['form', 'input'],
@@ -194,9 +194,39 @@ var View = bm2v.View;
     ],
     events: {
       'input': ['change', function (event) {
-        model.update('isGood', event.currentTarget.checked);
+        checkboxModel.update('isGood', event.currentTarget.checked);
+      }],
+    },
+  });
+  var radioModel = new Model({
+    color: 'red',
+  });
+  var radioView = new View({
+    template: '<label><input type="radio" name="color" value="red">red</label>'
+      + '<label><input type="radio" name="color" value="green">green</label>'
+      + '<label><input type="radio" name="color" value="yellow">yellow</label>'
+      + '<pre></pre>',
+    models: [
+      {
+        model: radioModel,
+        bind: {
+          color: [
+            ['form', 'input[type="radio"]']
+          ],
+          '': [
+            ['text', 'pre', function (model) {
+              return JSON.stringify(model, null, 2);
+            }],
+          ],
+        },
+      },
+    ],
+    events: {
+      'input': ['change', function (event) {
+        radioModel.update('color', event.currentTarget.value);
       }],
     },
   });
   form.appendChild(checkboxView.dom);
+  form.appendChild(radioView.dom);
 })();
