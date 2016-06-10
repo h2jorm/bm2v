@@ -2,7 +2,16 @@ import {Binder} from './binder';
 
 export class View {
   constructor(conf) {
-    const {template, models, events, model, bind} = conf;
+    const {
+      template, models, model, bind,
+      events: domEvents,
+      on: viewEvents,
+    } = conf;
+    // cache parent view and child views
+    this.parent = null;
+    this.children = [];
+    // `this.events` points to view events, not dom events
+    this.events = [];
     this.dom = createContainer(template);
     // this is a sugar api
     if (model && bind)
@@ -12,11 +21,17 @@ export class View {
         const {model, bind} = _model;
         this.bindModel(model, bind);
       });
-    if (events)
-      for (let selector in events) {
-        const event = events[selector];
+    if (domEvents)
+      for (let selector in domEvents) {
+        const event = domEvents[selector];
         const [eventName, callback] = event;
         this.bindEvent(selector, eventName, callback);
+      }
+    if (viewEvents)
+      for (let eventName in viewEvents) {
+        const cb = viewEvents[eventName];
+        if (typeof cb === 'function')
+          this.events[eventName] = cb.bind(this);
       }
   }
   append(selector, view) {
@@ -26,12 +41,18 @@ export class View {
       case 2:
       parentNode = this.query(selector)[0];
       childNode = view instanceof View ? view.dom : view;
+      if (view instanceof View) {
+        childNode = view.dom;
+        recordCtxViews.call(this, view);
+      } else
+        childNode = view;
       break;
       case 1:
       parentNode = this.dom;
-      if (selector instanceof View)
+      if (selector instanceof View) {
         childNode = selector.dom;
-      else if (selector instanceof HTMLElement)
+        recordCtxViews.call(this, selector);
+      } else if (selector instanceof HTMLElement)
         childNode = selector;
       else
         throw new Error(errMsg);
@@ -42,6 +63,10 @@ export class View {
     if (!parentNode)
       throw new Error(`can not find '${selector}' when try to append to it`);
     parentNode.appendChild(childNode);
+    function recordCtxViews(childView) {
+      childView.parent = this;
+      this.children.push(childView);
+    }
   }
   bindEvent(selector, eventName, callback) {
     const doms = this.query(selector);
@@ -59,6 +84,27 @@ export class View {
         model.cacheBinder(key, new Binder(bindCog, this));
         model.update(key, key === '' ? model.model : model.model[key]);
       });
+    }
+  }
+  broadcast(eventName) {
+    const args = Array.prototype.slice.call(arguments, 1);
+    broadcast(this.children);
+
+    function broadcast(childViews) {
+      childViews.forEach(childView => {
+        const cb = childView.events[eventName];
+        cb(args);
+        if (childView.children.length)
+          broadcast(childView.children);
+      });
+    }
+  }
+  emit(eventName) {
+    const args = Array.prototype.slice.call(arguments, 1);
+    let parentView = this;
+    while (parentView = parentView.parent) {
+      const cb = parentView.events[eventName];
+      cb(args);
     }
   }
   query(selector) {
@@ -87,7 +133,10 @@ function createContainer(html) {
 function matchesSelector(dom, selector) {
   if (!selector || !dom)
     return false;
-  const matches = dom.matches || dom.msMatchesSelector || dom.mozMatchesSelector || dom.webkitMatchesSelector;
+  const matches = dom.matches ||
+    dom.msMatchesSelector ||
+    dom.mozMatchesSelector ||
+    dom.webkitMatchesSelector;
   if (!matches)
     return false;
   return matches.call(dom, selector);

@@ -45,6 +45,9 @@ describe('View', function () {
       });
       view.append('ul', innerView);
       expect(view.dom.innerHTML).toBe('<ul><li>hello world</li></ul>');
+      expect(view.children.length).toBe(1);
+      expect(view.children[0]).toBe(innerView);
+      expect(innerView.parent).toBe(view);
     });
     it('2 parameters - dom', function () {
       var dom = document.createElement('li');
@@ -269,5 +272,78 @@ describe('View', function () {
     expect(count).toBe(1);
     view.dom.querySelector('button').click();
     expect(count).toBe(3);
+  });
+  it('emit', function () {
+    var count1 = 0;
+    var count2 = 0;
+    var gParentView = new View({
+      template: '<div data-grandparent></div>',
+      on: {
+        HELLO: function () {
+          count1++;
+        },
+      },
+    });
+    var parentView = new View({
+      template: '<div data-parent></div>',
+      on: {
+        HELLO: function () {
+          count2++;
+        },
+      },
+    });
+    var childView = new View({
+      template: '<div data-child></div>'
+    });
+    expect(count1).toBe(0);
+    expect(count2).toBe(0);
+    gParentView.append(parentView);
+    parentView.append(childView);
+    childView.emit('HELLO');
+    expect(count1).toBe(1);
+    expect(count2).toBe(1);
+  });
+  it('broadcast', function () {
+    var count1 = 0;
+    var count2 = 0;
+    var count3 = 0;
+    var parentView = new View({
+      template: '<div data-parent></div>',
+    });
+    var childView1 = new View({
+      template: '<div data-child></div>',
+      on: {
+        HELLO: function () {
+          count1++;
+        },
+      },
+    });
+    var childView2 = new View({
+      template: '<div data-child></div>',
+      on: {
+        HELLO: function () {
+          count2++;
+        },
+      },
+    });
+    var gChildView = new View({
+      template: '<div data-grandchild></div>',
+      on: {
+        HELLO: function () {
+          count3++;
+        },
+      },
+    });
+    parentView.broadcast('HELLO');
+    expect(count1).toBe(0);
+    expect(count2).toBe(0);
+    expect(count3).toBe(0);
+    parentView.append(childView1);
+    parentView.append(childView2);
+    childView1.append(gChildView);
+    parentView.broadcast('HELLO');
+    expect(count1).toBe(1);
+    expect(count2).toBe(1);
+    expect(count3).toBe(1);
   });
 });
