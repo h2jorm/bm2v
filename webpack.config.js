@@ -43,6 +43,7 @@ if (!isProd) {
 
 if (isProd) {
   module.exports.output.path = path.join(__dirname, 'dist');
+  module.exports.output.filename = '[name].min.js';
   module.exports.plugins.push(
     new webpack.optimize.UglifyJsPlugin({
       compress: {warnings: false}
