@@ -1,5 +1,7 @@
 import {Binder} from './binder';
 
+const htmlSpaceReg = /(^\s+|\s+$)/g;
+
 export class View {
   constructor(conf) {
     const {
@@ -145,10 +147,17 @@ export class View {
 
 function createContainer(html) {
   var container = document.createElement('div');
-  container.innerHTML = html;
+  container.innerHTML = trimHtml(html);
   if (container.childNodes.length === 1 && container.childNodes[0].nodeType === 1)
     return container.childNodes[0];
   return container;
+}
+
+// remove none-word character at both ends of html string
+function trimHtml(html) {
+  if (!html)
+    return '';
+  return html.replace(htmlSpaceReg, '');
 }
 
 function matchesSelector(dom, selector) {
