@@ -6,7 +6,7 @@ export class View {
       template, models, model, bind,
       events: domEvents,
       on: viewEvents,
-    } = conf;
+    } = this._unpackConf(conf);
     // cache parent view and child views
     this.parent = null;
     this.children = [];
@@ -33,6 +33,27 @@ export class View {
         if (typeof cb === 'function')
           this.events[eventName] = cb.bind(this);
       }
+  }
+  /**
+   * @private
+   * @return {Object} {template, models, model, bind, events, on}
+   */
+  _unpackConf(conf) {
+    const buildIn = [
+      'template', 'models', 'model', 'bind', 'events', 'on',
+    ];
+    const ret = {};
+    buildIn.forEach(attrName => {
+      ret[attrName] = conf[attrName];
+      delete conf[attrName];
+    });
+    for (let methodName in conf) {
+      if (!conf.hasOwnProperty(methodName))
+        continue;
+      let method = conf[methodName];
+      this[methodName] = conf[methodName];
+    }
+    return ret;
   }
   append(selector, view) {
     let parentNode, childNode;

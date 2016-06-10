@@ -19,6 +19,19 @@ describe('View', function () {
       return div.innerHTML;
     }
   });
+  it('_unpackConf', function () {
+    function hello() {
+      return this.position;
+    }
+    var view = new View({
+      hello: hello,
+      position: 'world',
+    });
+    expect(view.hello).toBe(hello);
+    expect(view.position).toBe('world');
+    // context points to view
+    expect(view.hello()).toBe('world');
+  });
   it('query', function () {
     var view1 = new View({
       template: '<li>hello</li>',
