@@ -35,6 +35,15 @@ describe('model', function () {
       content: 'hello ...',
     });
   });
+  it('events', function () {
+    var msg;
+    model.on('hello', function (text) {
+      msg = text;
+    });
+    expect(msg).toBeUndefined();
+    model.trigger('hello', 'world');
+    expect(msg).toBe('world');
+  });
   describe('update', function () {
     var count;
     beforeAll(function () {
@@ -52,8 +61,13 @@ describe('model', function () {
       count = 0;
     });
     it('when `key` is a normal string', function () {
+      var args;
+      model.on('$update', function () {
+        args = Array.prototype.slice.call(arguments);
+      });
       model.update('title', 'hello');
       expect(model.get('title')).toBe('hello');
+      expect(args).toEqual(['title', 'hello']);
     });
     it('when `key` is an empty string', function () {
       model.update('', {
@@ -94,12 +108,17 @@ describe('model', function () {
           {title: 'world', done: true},
         ],
       });
+      updateCollectionArgs = void 0;
     });
     it('when `key` is a normal string', function () {
-      model.updateCollection('todos', 2, {
-        title: 'hi', done: false,
+      var args;
+      model.on('$updateCollection', function () {
+        args = Array.prototype.slice.call(arguments);
       });
+      var newTodo = {title: 'hi', done: false,};
+      model.updateCollection('todos', 2, newTodo);
       expect(model.get('todos').length).toBe(3);
+      expect(args).toEqual(['todos', 2, newTodo]);
     });
     it('when `key` is an empty string', function () {
       model = new Model([

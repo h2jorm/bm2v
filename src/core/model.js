@@ -13,6 +13,7 @@ export class Model {
   constructor(value) {
     this.model = value;
     this.cache = {};
+    this.events = {};
   }
   cacheBinder(key, binder) {
     const old = this.cache[key];
@@ -21,10 +22,23 @@ export class Model {
     else
       old.add(binder);
   }
+  cancel() {
+    // TODO: remove registered events
+  }
   get(key) {
     if (!key)
       return this.model;
     return this.model[key];
+  }
+  on(eventName, cb) {
+    if (typeof cb === 'function')
+      this.events[eventName] = cb;
+  }
+  trigger(eventName, ...args) {
+    const cb = this.events[eventName];
+    if (typeof cb !== 'function')
+      return;
+    cb.apply(this, args);
   }
   update(key, value) {
     if (key === '')
@@ -43,6 +57,7 @@ export class Model {
         if (typeof binder.update === 'function')
           binder.update(this.model);
       });
+    this.trigger('$update', key, value);
   }
   updateCollection(key, index, value) {
     if (key === '')
@@ -61,5 +76,6 @@ export class Model {
         if (typeof binder.update === 'function')
           binder.update(this.model);
       });
+    this.trigger('$updateCollection', key, index, value);
   }
 }
