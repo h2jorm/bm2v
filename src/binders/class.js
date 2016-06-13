@@ -1,12 +1,13 @@
 import {Binder} from '../core/binder';
 
-Binder.register('class', function (view, selector, classNames) {
+Binder.register('class', function (view, selector, classNames, transform) {
   classNames = toClassNameList(classNames);
   const doms = view.query(selector);
   this.update = function (value) {
+    const toAdd = typeof transform === 'function' ? !!transform(value) : !!value;
     doms.forEach(dom => {
       const classList = dom.classList;
-      const exec = !!value ? classList.add : classList.remove;
+      const exec = toAdd ? classList.add : classList.remove;
       exec.apply(classList, classNames);
     });
   };
