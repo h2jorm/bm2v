@@ -8,6 +8,10 @@ export class Binder {
     delete Binder.strategies[type];
   }
   constructor(cog, viewCtx) {
+    if  (cog.length === 1 && typeof cog[0] === 'function') {
+      this.update = cog[0].bind(viewCtx);
+      return;
+    }
     const [type, ...strategyParams] = cog;
     const strategy = Binder.strategies[type];
     if (!strategy)

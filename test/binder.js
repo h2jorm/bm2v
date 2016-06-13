@@ -23,4 +23,18 @@ describe('Binderer', function () {
     expect(ctx).toBe(binder);
     Binder.cancel('test');
   });
+  it('instantiate fn', function () {
+    var ctx;
+    var myViewCtx = {};
+    var count = 0;
+    var customBehavior = function () {
+      count++;
+      ctx = this;
+    };
+    var binder = new Binder([customBehavior], myViewCtx);
+    expect(count).toBe(0);
+    binder.update();
+    expect(ctx).toBe(myViewCtx);
+    expect(count).toBe(1);
+  });
 });
