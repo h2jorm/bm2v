@@ -3,6 +3,8 @@ import {Binder} from '../core/binder';
 Binder.register('for', function (view, selector, createChildView) {
   const doms = view.query(selector);
   this.update = function (collection) {
+    if (!collection)
+      return;
     let childViews = [];
     collection.forEach((model, index) => {
       const childView = createChildView(model, index);
