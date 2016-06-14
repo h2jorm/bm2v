@@ -2,6 +2,7 @@ import './class';
 import './empty';
 import './for';
 import './form';
+import './html';
 import './if';
 import './json';
 import './style';
