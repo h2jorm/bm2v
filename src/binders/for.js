@@ -1,3 +1,4 @@
+// `for` binder is very inefficient
 import {Binder} from '../core/binder';
 
 Binder.register('for', function (view, selector, createChildView) {
