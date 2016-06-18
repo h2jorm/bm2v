@@ -1,3 +1,4 @@
+import './attr';
 import './class';
 import './empty';
 import './for';
