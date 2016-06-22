@@ -146,6 +146,8 @@ export class View {
 }
 
 function createContainer(html) {
+  if (html instanceof HTMLElement)
+    return html;
   var container = document.createElement('div');
   container.innerHTML = trimHtml(html);
   if (container.childNodes.length === 1 && container.childNodes[0].nodeType === 1)
